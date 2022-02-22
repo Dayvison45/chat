@@ -19,7 +19,13 @@
   </head>
   <body>
    
-    <ul id="messages"></ul>
+    <ul id="messages">
+    {{#each messagesU}}
+{{else}}
+<h1>Nao foi posssivel carregar as mensagens </h1>
+{{/each}}
+    </ul>
+    input type="hidden" name="key" id="key"value="{{key}}">
     <input type="hidden" id="by" name="by" value="{{by}}">
     <input type="hidden" id="from" name="from" value="{{from}}">
     <form method="post" id="form" action="/enviar">
@@ -49,10 +55,10 @@ makeRequest()
     }
 var by = document.getElementById("by").value
 var from = document.getElementById("from").value
-
+var key =  document.getElementById("keys")
 
     httpRequest.onreadystatechange = alertContents;
-    httpRequest.open('POST', 'http://localhost:8002/enviar/'+by+'/'+from+'/'+box.value);
+    httpRequest.open('POST', 'http://localhost:8002/enviar/'+by+'/'+from+'/'+box.value)+'/'+key;
     httpRequest.send();
   }
 
