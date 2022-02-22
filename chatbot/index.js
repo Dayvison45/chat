@@ -29,14 +29,20 @@ app.post("/enviar/:by/:from/:msg/:key",(req,res)=>{
 var messag={
   by:req.params.by,
   from:req.params.from,
-  key:req.params.key
+  key:req.params.key,
 message:JSON.stringify(req.params.msg)
 }
 
 new msg(messag).save().then(console.log('adicionada a mensagem'))
 })
 app.get('/chat/:by/:from',(req,res)=>{
-  Key.find({by:req.params.by,from:req.params.from} $or{by:req.params.from,from:req.params.by}).lean().then((keys)=>{
+ 
+  Key.find( {
+    $and : [
+        { $or : [ { by : req.params.by }, {from:req.params.from} ] },
+        { $or : [ { from:req.params.by}, { by:req.params.from } ] }
+    ]
+}).lean().then((keys)=>{
   Msg.find({key:keys}).lean().then((messagesU)=>{
   var key = keys.id
   var by = req.params.by;
